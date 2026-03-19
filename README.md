@@ -2,7 +2,7 @@
 
 **Authors:** Roxanne Wang & Ryan Zhang  
 **Course:** DSC 80 — Final Project  
-**Live Website:** [food-recipe-analysis](https://wwroxanne219.github.io/food-recipe-analysis/)
+**Live Website:** [food-recipe-analysis]([https://wwroxanne219.github.io/food-recipe-analysis/](https://wwroxanne219.github.io/food-recipe-analysis/))
 
 ---
 
