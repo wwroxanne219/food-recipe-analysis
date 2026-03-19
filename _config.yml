@@ -1,0 +1,5 @@
+remote_theme: pages-themes/midnight@v0.2.0
+plugins:
+- jekyll-remote-theme
+title: Do Faster Recipes Receive Higher Ratings?
+descriptions: An analysis of Food.com recipes exploring how preparation time relates to average recipe ratings, along with a predictive model for recipe ratings.
