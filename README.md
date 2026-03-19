@@ -11,7 +11,7 @@
 
 This project analyzes the **Food.com Recipes and Ratings dataset**, which combines recipe-level information from Food.com with user-submitted ratings and reviews. The recipes dataset contains attributes like preparation time, number of steps, number of ingredients, nutritional information, and tags. The interactions dataset records individual user ratings (1–5) linked to each recipe by ID.
 
-After merging and cleaning, the combined dataset contains **[ADD TOTAL ROW COUNT] rows**, where each row represents one recipe with its associated average rating.
+After merging and cleaning, the combined dataset contains **81,173 rows**, where each row represents one unique recipe with its associated average rating. Of these, 36,419 recipes take 30 minutes or less and 44,754 take more than 30 minutes.
 
 Our central question is:
 
@@ -77,7 +77,7 @@ The distribution of preparation time is strongly right-skewed. The vast majority
 
 ![Distribution of Average Recipe Ratings](plot2_rating_dist.png)
 
-Average ratings are heavily concentrated between 4 and 5, with relatively few recipes receiving low ratings. This ceiling effect is typical of voluntary rating systems — users tend to only rate recipes they tried and liked. It also means that small differences in average rating (like the 0.035-point gap we test in the hypothesis section) may actually be meaningful, since the effective range of typical ratings is narrow.
+Average ratings are heavily concentrated between 4 and 5, with relatively few recipes receiving low ratings. This ceiling effect is typical of voluntary rating systems — users tend to only rate recipes they tried and liked. It also means that small differences in average rating (like the ~0.038-point gap we test in the hypothesis section) may actually be meaningful, since the effective range of typical ratings is narrow.
 
 ---
 
@@ -127,18 +127,20 @@ We analyzed whether the missingness of the `description` column depends on other
 **Does `description` missingness depend on `n_steps`?**
 
 - Observed difference in mean `n_steps`: **0.9953**
-- P-value: **0.188**
+- P-value: **0.182**
 
-Since the p-value (0.188) is above the 0.05 significance level, we **fail to reject** the null hypothesis. The missingness of `description` does not appear to depend on the number of steps in the recipe.
+Since the p-value (0.182) is above the 0.05 significance level, we **fail to reject** the null hypothesis. The missingness of `description` does not appear to depend on the number of steps in the recipe.
 
 **Does `description` missingness depend on `submitted_year`?**
 
 - Observed difference in mean `submitted_year`: **−0.5153**
-- P-value: **0.020**
+- P-value: **0.011**
 
-Since the p-value (0.020) is below 0.05, we **reject** the null hypothesis. The missingness of `description` does appear to depend on when the recipe was submitted. Recipes submitted in earlier years are somewhat more likely to be missing a description, possibly reflecting changes in contributor norms or platform design over time.
+Since the p-value (0.011) is below 0.05, we **reject** the null hypothesis. The missingness of `description` does appear to depend on when the recipe was submitted. Recipes submitted in earlier years are somewhat more likely to be missing a description, possibly reflecting changes in contributor norms or platform design over time.
 
-[INSERT permutation test distribution plot for submitted_year missingness HERE]
+![Permutation Distribution: Missingness of Description vs Submitted Year](plot5_missingness_permutation.png)
+
+The histogram above shows the null distribution of 1,000 permuted differences in mean submission year between recipes with and without a description. The red dashed line marks the observed statistic (−0.515). Because the observed value falls well outside the bulk of the null distribution, the p-value of 0.011 is small enough to reject the null — the missingness of `description` is not independent of `submitted_year`.
 
 ---
 
@@ -266,6 +268,6 @@ We evaluated whether the final model performs equitably across the two preparati
 | Recipes ≤ 30 minutes | 0.6012 |
 | Recipes > 30 minutes | 0.6533 |
 | **Observed difference (Y − X)** | **0.0521** |
-| **P-value** | **< 0.001** |
+| **P-value** | **0.001** |
 
 **Conclusion:** We reject the null hypothesis at the 0.05 level. The model predicts average ratings notably less accurately for longer recipes (RMSE 0.653) than for quicker ones (RMSE 0.601). This is likely because longer recipes are more variable in nature — they span a wider range of cuisine types, difficulty levels, and ingredient counts — making them harder to predict from the features available. Addressing this fairness gap in future work might involve adding more fine-grained features (e.g., cuisine category, complexity score) or training separate models for each preparation-time group.
